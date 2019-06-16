@@ -7,12 +7,17 @@ class User
     def send_password_reset
       generate_token(:password_reset_token)
       update_attribute(:password_reset_at, Time.zone.now)
+      UserMailer.password_reset(self).deliver_now
     end
         
     def generate_token(column)
       begin
         self[column] = SecureRandom.urlsafe_base64
       end while User.exists?(column => self[column]) 
+    end
+
+    def sent_confirmation_email
+      UserMailer.signup_confirmation(self).deliver_now
     end
 
     def set_password_digest
