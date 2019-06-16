@@ -19,11 +19,15 @@ Features:
 * As a user, I can visit reset password page from the link inside reset password email and reset my password (with confirmation and at least eight characters).
 * The link should be unique and only valid within six hours.
 
+## Requisits
+* Ruby 2.5.5
+
 ## Installation
 
 ### Local
 Edit config/database.yml with the postgres credentials and run the following commands:
 ```
+$ bundle install
 $ rails db:create
 $ rails db:migrate
 $ rails s
@@ -32,7 +36,8 @@ $ rails s
 ### Docker
 By default I attached a docker-compose with the configuration of the project (app + postgres). But letter opener gem doesn't work with docker so to test the email functionalities use local installation or build just the db in the docker-compose:
 ```
-$ docker-compose up db
+$ docker-compose up db -d
+$ bundle install
 $ rails db:create
 $ rails db:migrate
 $ rails s
@@ -42,5 +47,4 @@ $ rails s
 To test the application build the application in local or docker enviorment and then type the following commands:
 ```
 $ rspec
-
 ``` 
