@@ -51,7 +51,7 @@ RSpec.describe UsersController, type: :controller do
       form_params = { id: user.to_param, user: {username: "tests2"}}
       put :update, params: form_params 
       expect(flash[:success]).to match("User was successfully updated.")
-      expect(response).to render_template(:edit)
+      expect(response).to redirect_to(edit_user_path(user))
     end
   end
 end
