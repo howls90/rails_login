@@ -23,6 +23,8 @@ class PasswordResetsController < ApplicationController
       flash[:danger] = "Password reset has expired."
       redirect_to new_password_reset_path
     elsif @user.update(reset_password_params) && !@user.password.blank?
+      @user.password_reset_token = nil
+      @user.save
       flash[:success] = "Password has been reset!"
       redirect_to login_url
     elsif @user.password.blank?
