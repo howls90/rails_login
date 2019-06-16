@@ -65,4 +65,15 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context 'user module' do
+    let(:user) { User.create!(email: "email2@user.com", password: "12345678", password_confirmation: "12345678")}
+
+    it 'check authentication success' do
+      expect(user.authenticate(user.password)).to eq(true)
+    end
+
+    it 'check authentication success' do
+      expect(user.authenticate("123")).to eq(false)
+    end
+  end
 end

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :authorize, except: [:new, :create]
   before_action :user_permissions, only: [:edit, :update]
 
   # GET /users/new
@@ -14,6 +15,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(sign_in_params)
     if @user.save
+      cookies[:auth_token] = @user.auth_token
       flash[:success] = 'User was successfully created.'
       redirect_to edit_user_path(@user)
     else
@@ -32,7 +34,12 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def user_permissions
-      @user = User.find(params[:id])
+      if current_user.id == params[:id].to_i
+        @user = User.find(params[:id])
+      else
+        flash[:danger] = 'Unauthorized action.'
+        redirect_to edit_user_path(current_user) 
+      end
     end
 
     # Only allow a trusted parameter "white list" through.

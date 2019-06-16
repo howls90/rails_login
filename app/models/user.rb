@@ -1,8 +1,8 @@
-require 'digest/sha1'
-
 class User < ApplicationRecord
 
   attr_accessor :password, :password_confirmation
+
+  include Authentication
 
   before_create :set_new_user
 
@@ -20,13 +20,8 @@ class User < ApplicationRecord
       (self.new_record? || !self.password.blank?) ? true : false
     end
 
-    def set_new_user
+   def set_new_user
+      generate_token(:auth_token)
       self.username = self.email.split('@').first
     end
-
-    def set_password_digest
-      self.salt = Digest::SHA1.hexdigest("#{self.email} #{Time.now}")
-      self.password_digest = Digest::SHA1.hexdigest("#{self.password} and #{self.salt}")
-    end
-
 end
